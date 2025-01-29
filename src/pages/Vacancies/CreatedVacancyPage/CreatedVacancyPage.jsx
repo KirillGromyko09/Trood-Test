@@ -1,19 +1,30 @@
-import React from "react";
-import Sidebar from "../../../components/Sidebar/index.js";
-import { Container } from "@mui/material";
-import MainHeader from "../../../components/Headers/MainHeader/index.js";
+import { Box } from "@mui/material";
+import MainHeader from "../../../components/Headers/MainHeader";
+import SideBar from "../../../components/Sidebar";
+import CreatedVacancy from "../../../components/CreatedVacancy";
 
-const CreatedVacancyPage = () => {
-  const vacanciesNavItems = ["Main page", "Projects", "Vacancies", "People", "Tests",'Activities' , "Settings"];
+const CreateVacancyPage = () => {
+
+  const vacanciesNavItems = [
+    { label: "Main page", path: "/" },
+    { label: "Projects", path: "/projects" },
+    { label: "Vacancies", path: "/createVacancy" },
+    { label: "People", path: "/people" },
+    { label: "Tests", path: "/tests" },
+    { label: "Settings", path: "/settings" },
+  ];
   return (
-    <Container>
+    <Box sx={{width: '1440px' , height: '1024px'}}>
       <MainHeader />
-      <Sidebar navItems={vacanciesNavItems} />
-    </Container>
+      <Box sx={{display:'flex', marginTop: '40px'}}>
+        <SideBar navItems={vacanciesNavItems} />
+        <CreatedVacancy />
+      </Box>
+    </Box>
 
 
 
   );
 };
 
-export default CreatedVacancyPage;
+export default CreateVacancyPage;

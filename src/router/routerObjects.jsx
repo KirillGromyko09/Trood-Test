@@ -1,7 +1,9 @@
 import routeNames from "./routeNames.js";
-import ProjectsPage from "../pages/Projects/ProjectsPage/index.js";
-import CreateProjectPage from "../pages/Projects/CreateProjectPage/index.js";
-import CreateVacancyPage from "../pages/Vacancies/CreateVacancyPage/index.js";
+import ProjectsPage from "../pages/Projects/ProjectsPage";
+import CreateProjectPage from "../pages/Projects/CreateProjectPage";
+import CreateVacancyPage from "../pages/Vacancies/CreateVacancyPage";
+import ReadyProjectPage from "../pages/Projects/ReadyProjectPage";
+import CreatedVacancyPage from "../pages/Vacancies/CreatedVacancyPage";
 
 const routerObjects = [
   {
@@ -16,8 +18,18 @@ const routerObjects = [
   },
   {
     id: 3,
+    path: routeNames.ReadyProjectPage,
+    element: ReadyProjectPage,
+  },
+  {
+    id: 4,
     path: routeNames.CreateVacancyPage,
     element: CreateVacancyPage,
+  },
+  {
+    id: 5,
+    path: routeNames.CreatedVacancyPage,
+    element: CreatedVacancyPage,
   }
 
 ];

@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Container, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Toolbar, Typography } from "@mui/material";
 import { styles } from "./styles.js";
 import { fontStyles } from "../../../styles/fontStyles.js";
 import Message from "../../../assets/svg/Message.svg";
@@ -7,7 +7,7 @@ import Ellipse from "../../../assets/svg/Ellipse.svg";
 const MainHeader = () =>{
 
   return (
-    <Container sx={styles.container}>
+    <Box sx={styles.container}>
       <Box>
         <AppBar sx={styles.appBar}>
           <Toolbar sx={styles.toolbar}>
@@ -25,7 +25,7 @@ const MainHeader = () =>{
           </Toolbar>
         </AppBar>
       </Box>
-    </Container>
+    </Box>
   )
 }
 export default MainHeader;

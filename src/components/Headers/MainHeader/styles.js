@@ -3,8 +3,8 @@ export const styles = {
     width: '1360px',
     backgroundColor: '#FFFFFF',
     marginTop: '40px',
-    marginLeft: '40px',
-    marginRight: '40px',
+    // marginLeft: '40px',
+    // marginRight: '40px',
   },
   appBar: {
     backgroundColor: '#FFFFFF',

@@ -1,6 +1,7 @@
-import { Container } from "@mui/material";
+import { Box } from "@mui/material";
 import MainHeader from "../../../components/Headers/MainHeader/index.js";
 import SideBar from "../../../components/Sidebar/SideBar.jsx";
+import ProjectsList from "../../../components/ProjectsList";
 
 const ProjectsPage = ()=> {
 
@@ -13,10 +14,13 @@ const ProjectsPage = ()=> {
     { label: "Settings", path: "/settings" },
   ];
   return (
-    <Container>
+    <Box sx={{width: '1440px' , height: '1024px'}}>
       <MainHeader />
-      <SideBar navItems={projectsNavItems} />
-    </Container>
+      <Box sx={{display:'flex', marginTop: '40px'}}>
+        <SideBar navItems={projectsNavItems} />
+        <ProjectsList />
+      </Box>
+    </Box>
   )
 }
 export default ProjectsPage;
