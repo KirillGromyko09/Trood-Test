@@ -33,9 +33,16 @@ const ReadyProject = () => {
     navigate(`/projects/${id}/createVacancy`);
   };
 
-  const handleRemoveProject = () => {
-    removeProject(id);
-    navigate('/projects');
+  const handleRemoveProject = async () => {
+    try {
+      await axios.delete(`http://localhost:8080/projects/${id}`);
+
+      removeProject(id);
+
+      navigate('/projects');
+    } catch (error) {
+      console.error("Error removing project", error);
+    }
   };
 
   const handleUpdateProject = async (values) => {
