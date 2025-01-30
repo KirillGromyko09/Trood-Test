@@ -7,20 +7,23 @@ import { useVacanciesStore } from "../../store/useVacanciesStore.js";
 import { validationSchema } from "../../utils/validationSchemas/validationSchema.js";
 import { directions } from "../../utils/validationSchemas/directions.js";
 
-
 const CreateVacancy = () => {
   const navigate = useNavigate();
   const { addVacancy } = useVacanciesStore();
-  const { projectId } = useParams();
+  const { id } = useParams();
+  if (!id) {
+    console.error("ID not found, redirect to /projects");
+    navigate("/projects");
+    return null;
+  }
 
-
-  const handleVacancy = (id) => navigate(`/createdVacancy/${id}`);
+  const handleVacancy = (id) => navigate(`/projects/${id}/createdVacancy`);
 
   return (
     <Box sx={styles.container}>
       <Box sx={styles.mainBox}>
         <Typography variant="h5" sx={[styles.title, fontStyles.font.fontLg]}>
-          Create vacancy
+          Create Vacancy
         </Typography>
         <Formik
           initialValues={{
@@ -31,23 +34,22 @@ const CreateVacancy = () => {
             description: "",
           }}
           validationSchema={validationSchema}
-          onSubmit={(values, { resetForm }) => {
+          onSubmit={async (values, { resetForm }) => {
             const newVacancy = {
               ...values,
-              id: Date.now().toString(),
-              projectId: projectId,
+              id,
               deadlineTimestamp: new Date(values.deadline).getTime(),
             };
-            addVacancy(newVacancy);
+            await addVacancy(newVacancy);
             resetForm();
-            handleVacancy(newVacancy.id);
+            handleVacancy(id);
           }}
         >
           {({ errors, touched, handleChange, handleBlur, values }) => (
             <Form style={styles.form}>
               <Box sx={styles.fieldsRow}>
                 <Box sx={styles.boxText}>
-                  <Typography sx={[fontStyles.font.fontMd, {fontSize:'18px'}]}>Name</Typography>
+                  <Typography sx={[fontStyles.font.fontMd, { fontSize: "18px" }]}>Name</Typography>
                   <Field
                     as={TextField}
                     fullWidth
@@ -62,7 +64,7 @@ const CreateVacancy = () => {
                   />
                 </Box>
                 <Box sx={styles.boxText}>
-                  <Typography sx={[fontStyles.font.fontMd, {fontSize:'18px'}]}>Field</Typography>
+                  <Typography sx={[fontStyles.font.fontMd, { fontSize: "18px" }]}>Field</Typography>
                   <Field
                     as={Select}
                     fullWidth
@@ -80,17 +82,12 @@ const CreateVacancy = () => {
                       </MenuItem>
                     ))}
                   </Field>
-                  {touched.field && errors.field && (
-                    <Typography sx={{ color: "red", fontSize: "12px" }}>
-                      {errors.field}
-                    </Typography>
-                  )}
                 </Box>
               </Box>
 
               <Box sx={styles.fieldsRow}>
                 <Box sx={styles.boxText}>
-                  <Typography sx={[fontStyles.font.fontMd, {fontSize:'18px'}]}>Experience</Typography>
+                  <Typography sx={[fontStyles.font.fontMd, { fontSize: "18px" }]}>Experience</Typography>
                   <Field
                     as={TextField}
                     fullWidth
@@ -105,7 +102,7 @@ const CreateVacancy = () => {
                   />
                 </Box>
                 <Box sx={styles.boxText}>
-                  <Typography sx={[fontStyles.font.fontMd, {fontSize:'18px'}]}>Deadline</Typography>
+                  <Typography sx={[fontStyles.font.fontMd, { fontSize: "18px" }]}>Deadline</Typography>
                   <Field
                     as={TextField}
                     fullWidth
@@ -125,7 +122,7 @@ const CreateVacancy = () => {
               </Box>
 
               <Box sx={styles.boxTextFull}>
-                <Typography sx={[fontStyles.font.fontMd, {fontSize:'18px'}]}>Description</Typography>
+                <Typography sx={[fontStyles.font.fontMd, { fontSize: "18px" }]}>Description</Typography>
                 <Field
                   as={TextField}
                   fullWidth
@@ -141,11 +138,7 @@ const CreateVacancy = () => {
                 />
               </Box>
 
-              <Button
-                variant="contained"
-                type="submit"
-                sx={[styles.button , fontStyles.font.fontLg]}
-              >
+              <Button variant="contained" type="submit" sx={[styles.button, fontStyles.font.fontLg]}>
                 Create Vacancy
               </Button>
             </Form>

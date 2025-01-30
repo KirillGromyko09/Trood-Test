@@ -10,10 +10,10 @@ function App() {
     <Routes>
       <Route path="/" element={<Navigate to="/projects" replace />} />
       <Route path="/projects" element={<ProjectsPage />} />
-      <Route path="/readyProject/:id" element={<ReadyProjectPage />} />
+      <Route path="/projects/:id" element={<ReadyProjectPage />} />
       <Route path="/createProject" element={<CreateProjectPage />} />
-      <Route path="/createVacancy" element={<CreateVacancyPage />} />
-      <Route path="/createdVacancy/:id" element={<CreatedVacancyPage />} />
+      <Route path="/projects/:id/createVacancy" element={<CreateVacancyPage />} />
+      <Route path="/projects/:id/createdVacancy" element={<CreatedVacancyPage />} />
     </Routes>
   );
 }

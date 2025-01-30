@@ -8,17 +8,31 @@ import { useNavigate } from "react-router-dom";
 import { validationSchema } from "../../utils/validationSchemas/validationSchema.js";
 import { directions } from "../../utils/validationSchemas/directions.js";
 
-
 const CreateProject = () => {
   const navigate = useNavigate();
   const { addProject } = useProjectsStore();
 
+  const handleSubmit = async (values, { resetForm }) => {
+    try {
+      const newProject = {
+        ...values,
+        deadlineTimestamp: new Date(values.deadline).getTime(),
+      };
+
+      await addProject(newProject);
+
+      resetForm();
+      navigate("/projects");
+    } catch (error) {
+      console.error("Error sending project data:", error);
+    }
+  };
 
   return (
     <Box sx={styles.container}>
       <Box sx={styles.mainBox}>
         <Typography variant="h5" sx={[styles.title, fontStyles.font.fontLg]}>
-          Creating project
+          Creating Project
         </Typography>
         <Formik
           initialValues={{
@@ -29,22 +43,13 @@ const CreateProject = () => {
             description: "",
           }}
           validationSchema={validationSchema}
-          onSubmit={(values, { resetForm }) => {
-            const newProject = {
-              ...values,
-              id: Date.now().toString(),
-              deadlineTimestamp: new Date(values.deadline).getTime(),
-            };
-            addProject(newProject);
-            resetForm();
-            navigate("/projects");
-          }}
+          onSubmit={handleSubmit}
         >
           {({ errors, touched, handleChange, handleBlur, values }) => (
             <Form style={styles.form}>
               <Box sx={styles.fieldsRow}>
                 <Box sx={styles.boxText}>
-                  <Typography sx={[fontStyles.font.fontMd, {fontSize:'18px'}]}>Name</Typography>
+                  <Typography sx={[fontStyles.font.fontMd, { fontSize: "18px" }]}>Name</Typography>
                   <Field
                     as={TextField}
                     fullWidth
@@ -59,7 +64,7 @@ const CreateProject = () => {
                   />
                 </Box>
                 <Box sx={styles.boxText}>
-                  <Typography sx={[fontStyles.font.fontMd, {fontSize:'18px'}]}>Field</Typography>
+                  <Typography sx={[fontStyles.font.fontMd, { fontSize: "18px" }]}>Field</Typography>
                   <Field
                     as={Select}
                     fullWidth
@@ -87,7 +92,7 @@ const CreateProject = () => {
 
               <Box sx={styles.fieldsRow}>
                 <Box sx={styles.boxText}>
-                  <Typography sx={[fontStyles.font.fontMd, {fontSize:'18px'}]}>Experience</Typography>
+                  <Typography sx={[fontStyles.font.fontMd, { fontSize: "18px" }]}>Experience</Typography>
                   <Field
                     as={TextField}
                     fullWidth
@@ -102,7 +107,7 @@ const CreateProject = () => {
                   />
                 </Box>
                 <Box sx={styles.boxText}>
-                  <Typography sx={[fontStyles.font.fontMd, {fontSize:'18px'}]}>Deadline</Typography>
+                  <Typography sx={[fontStyles.font.fontMd, { fontSize: "18px" }]}>Deadline</Typography>
                   <Field
                     as={TextField}
                     fullWidth
@@ -122,7 +127,7 @@ const CreateProject = () => {
               </Box>
 
               <Box sx={styles.boxTextFull}>
-                <Typography sx={[fontStyles.font.fontMd, {fontSize:'18px'}]}>Description</Typography>
+                <Typography sx={[fontStyles.font.fontMd, { fontSize: "18px" }]}>Description</Typography>
                 <Field
                   as={TextField}
                   fullWidth
@@ -138,11 +143,7 @@ const CreateProject = () => {
                 />
               </Box>
 
-              <Button
-                variant="contained"
-                type="submit"
-                sx={[styles.button , fontStyles.font.fontLg]}
-              >
+              <Button variant="contained" type="submit" sx={[styles.button, fontStyles.font.fontLg]}>
                 Create Project
               </Button>
             </Form>

@@ -1,3 +1,4 @@
+
 import { Formik, Form, Field } from "formik";
 import { Box, Button, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { useProjectsStore } from "../../store/useProjectsStore.js";
@@ -6,26 +7,51 @@ import { fontStyles } from "../../styles/fontStyles.js";
 import { useNavigate, useParams } from "react-router-dom";
 import { validationSchema } from "../../utils/validationSchemas/validationSchema.js";
 import { directions } from "../../utils/validationSchemas/directions.js";
-
-
-
+import axios from 'axios';
+import { useEffect } from "react";
+import { useVacanciesStore } from "../../store/useVacanciesStore.js";
 
 const ReadyProject = () => {
   const { id } = useParams();
-  const { projects , removeProject } = useProjectsStore();
+  const { projects, updateProject, removeProject } = useProjectsStore();
   const navigate = useNavigate();
+  const { loadVacanciesByProjectId } = useVacanciesStore();
 
-  const project = projects.find((project) => project.id === id);
+  const project = projects.find((project) => project.id === id || project.id === Number(id));
 
+
+  const updateProjectOnServer = async (updatedProject) => {
+    try {
+      await axios.put(`http://localhost:8080/projects/${id}`, updatedProject);
+    } catch (error) {
+      console.error("Error updating project on server", error);
+
+    }
+  };
 
   const handleCreateVacancy = () => {
-    navigate("/createVacancy");
+    navigate(`/projects/${id}/createVacancy`);
   };
 
   const handleRemoveProject = () => {
     removeProject(id);
-    navigate('/projects')
-  }
+    navigate('/projects');
+  };
+
+  const handleUpdateProject = async (values) => {
+    await updateProjectOnServer(values);
+
+    updateProject(id, values);
+
+    navigate('/projects');
+  };
+
+  useEffect(() => {
+    if (id) {
+      loadVacanciesByProjectId(id);
+    }
+  }, [id, loadVacanciesByProjectId]);
+
 
   if (!project) {
     return (
@@ -40,11 +66,11 @@ const ReadyProject = () => {
   return (
     <Box sx={styles.container}>
       <Box sx={styles.mainBox}>
-        <Box sx={{display: 'flex' , justifyContent: 'space-between'}}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography variant="h5" sx={[styles.title, fontStyles.font.fontLg]}>{project.name}</Typography>
           <Button
             variant="contained"
-            sx={[styles.button , fontStyles.font.fontLg]}
+            sx={[styles.button, fontStyles.font.fontLg]}
             onClick={handleRemoveProject}
           >
             Delete project
@@ -60,13 +86,13 @@ const ReadyProject = () => {
             description: project.description || "",
           }}
           validationSchema={validationSchema}
-         onSubmit={handleCreateVacancy}
+          onSubmit={handleUpdateProject}
         >
           {({ errors, touched, handleChange, handleBlur, values }) => (
             <Form style={styles.form}>
               <Box sx={styles.fieldsRow}>
                 <Box sx={styles.boxText}>
-                  <Typography sx={[fontStyles.font.fontMd, {fontSize:'18px'}]}>Field</Typography>
+                  <Typography sx={[fontStyles.font.fontMd, { fontSize: '18px' }]}>Field</Typography>
                   <Field
                     as={Select}
                     fullWidth
@@ -91,7 +117,7 @@ const ReadyProject = () => {
                       {errors.field}
                     </Typography>
                   )}
-                  <Typography sx={[fontStyles.font.fontMd, {fontSize:'18px'}]}>Experience</Typography>
+                  <Typography sx={[fontStyles.font.fontMd, { fontSize: '18px' }]}>Experience</Typography>
                   <Field
                     as={TextField}
                     fullWidth
@@ -106,7 +132,7 @@ const ReadyProject = () => {
                   />
                 </Box>
                 <Box sx={styles.boxText}>
-                  <Typography sx={[fontStyles.font.fontMd, {fontSize:'18px'}]}>Deadline</Typography>
+                  <Typography sx={[fontStyles.font.fontMd, { fontSize: '18px' }]}>Deadline</Typography>
                   <Field
                     as={TextField}
                     fullWidth
@@ -123,12 +149,10 @@ const ReadyProject = () => {
                     }}
                   />
                 </Box>
-
-
               </Box>
 
               <Box sx={styles.boxTextFull}>
-                <Typography sx={[fontStyles.font.fontMd, {fontSize:'18px'}]}>Description</Typography>
+                <Typography sx={[fontStyles.font.fontMd, { fontSize: '18px' }]}>Description</Typography>
                 <Field
                   as={TextField}
                   fullWidth
@@ -143,19 +167,48 @@ const ReadyProject = () => {
                   helperText={touched.description && errors.description}
                 />
               </Box>
+
               <Button
                 variant="contained"
                 type="submit"
-                sx={[styles.button , fontStyles.font.fontLg , {marginTop: "20px"}]}
+                sx={[styles.button, fontStyles.font.fontLg, { marginTop: "20px" }]}
               >
-                Add vacancy
+                Save Changes
+              </Button>
+              <Button
+                variant="contained"
+                sx={[styles.button, fontStyles.font.fontLg, { marginTop: "20px" }]}
+                onClick={handleCreateVacancy}
+              >
+                Create Vacancy
               </Button>
             </Form>
           )}
+
+          {/*<Typography variant="h5" gutterBottom>*/}
+          {/*  Vacancies:*/}
+          {/*</Typography>*/}
+          {/*<Box>*/}
+          {/*  {vacancies*/}
+          {/*    .filter((vacancy) => vacancy.projectId === id)*/}
+          {/*    .map((vacancy) => (*/}
+          {/*      <Box key={vacancy.id} sx={{ marginBottom: "10px" }}>*/}
+          {/*        <Typography variant="h6">{vacancy.name}</Typography>*/}
+          {/*        <Typography variant="body1">{vacancy.description}</Typography>*/}
+          {/*        <Button*/}
+          {/*          variant="outlined"*/}
+          {/*          sx={{ marginTop: "10px" }}*/}
+          {/*        >*/}
+          {/*          Remove Vacancy*/}
+          {/*        </Button>*/}
+          {/*      </Box>*/}
+          {/*    ))}*/}
+          {/*</Box>*/}
         </Formik>
+
+
       </Box>
     </Box>
-
   );
 };
 

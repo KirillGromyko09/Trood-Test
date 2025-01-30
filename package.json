@@ -7,15 +7,18 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint vite-project",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
   },
   "dependencies": {
     "@date-io/date-fns": "^3.2.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^6.4.0",
+    "axios": "^1.7.9",
     "date-fns": "^3.6.0",
     "formik": "^2.4.6",
+    "go": "^3.0.1",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
